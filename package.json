@@ -1,0 +1,23 @@
+{
+  "name": "typescript-ddd-forum",
+  "version": "1.0.0",
+  "description": "![img.png](images/logo.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dyarleniber/typescript-ddd-forum.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dyarleniber/typescript-ddd-forum/issues"
+  },
+  "homepage": "https://github.com/dyarleniber/typescript-ddd-forum#readme",
+  "devDependencies": {
+    "@types/node": "^16.7.0",
+    "typescript": "^4.3.5"
+  }
+}
