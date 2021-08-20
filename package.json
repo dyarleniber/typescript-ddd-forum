@@ -1,8 +1,8 @@
 {
   "name": "typescript-ddd-forum",
   "version": "1.0.0",
-  "description": "![img.png](images/logo.png)",
-  "main": "index.js",
+  "description": "",
+  "main": "build/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,6 +18,8 @@
   "homepage": "https://github.com/dyarleniber/typescript-ddd-forum#readme",
   "devDependencies": {
     "@types/node": "^16.7.0",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
   }
 }
