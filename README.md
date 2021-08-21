@@ -2,7 +2,7 @@
 
 ![img.png](images/logo.png)
 
-Hacker news-inspired forum app built with TypeScript using Clean Architecture, SOLID principles and DDD best practices from [solidbook.io](https://solidbook.io).
+Hacker news-inspired forum app built with TypeScript using Clean Architecture, SOLID principles, and DDD best practices from [solidbook.io](https://solidbook.io).
 
 DDDForum is the application built in [solidbook.io - The Software Design and Architecture Handbook](https://solidbook.io).
 
