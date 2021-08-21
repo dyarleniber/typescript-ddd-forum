@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "ts:lint": "eslint . --ext .ts --fix",
     "ts:prettier": "prettier --write \"**/*.ts\"",
-    "ts:format": "npm run ts:lint && npm run ts:prettier"
+    "ts:format": "npm run ts:lint && npm run ts:prettier",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -29,10 +30,15 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.1",
+    "husky": "^7.0.0",
+    "lint-staged": "^11.1.2",
     "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
     "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
+  },
+  "lint-staged": {
+    "*.{ts}": "npm run ts:format"
   }
 }
