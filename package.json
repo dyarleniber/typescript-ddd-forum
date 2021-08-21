@@ -39,6 +39,6 @@
     "typescript": "^4.3.5"
   },
   "lint-staged": {
-    "*.{ts}": "npm run ts:format"
+    "*.ts": "npm run ts:format"
   }
 }
