@@ -7,7 +7,9 @@
     "dev": "nodemon",
     "build": "rimraf ./build && tsc",
     "start": "node build/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:dev": "jest --watchAll",
+    "test:coverage": "jest --coverage",
     "ts:lint": "eslint . --ext .ts --fix",
     "ts:prettier": "prettier --write \"**/*.ts\"",
     "ts:format": "npm run ts:lint && npm run ts:prettier",
@@ -24,6 +26,7 @@
   },
   "homepage": "https://github.com/dyarleniber/typescript-ddd-forum#readme",
   "devDependencies": {
+    "@types/jest": "^27.0.1",
     "@types/node": "^16.7.0",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
@@ -31,14 +34,20 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.1",
     "husky": "^7.0.0",
+    "jest": "^27.1.0",
     "lint-staged": "^11.1.2",
     "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
   },
   "lint-staged": {
     "*.ts": "npm run ts:format"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "uuid": "^8.3.2"
   }
 }
