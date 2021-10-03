@@ -3,6 +3,13 @@ import { AggregateRoot } from "../AggregateRoot";
 import { UniqueEntityID } from "../UniqueEntityID";
 
 export class DomainEvents {
+  // The handlersMap is an Identity map of Domain Event names 
+  // to callback functions.
+  // {
+  //   "UserCreated": [Function, Function, Function],
+  //   "UserEdited": [Function, Function],
+  //   "PostCreated": [Function, Function]
+  // }
   private static handlersMap = {};
   private static markedAggregates: AggregateRoot<any>[] = [];
 
@@ -21,6 +28,12 @@ export class DomainEvents {
     }
   }
 
+  /**
+   * @method dispatchAggregateEvents
+   * @static
+   * @private
+   * @desc Call all of the handlers for any domain events on this aggregate.
+   */
   private static dispatchAggregateEvents(aggregate: AggregateRoot<any>): void {
     aggregate.domainEvents.forEach((event: IDomainEvent) =>
       this.dispatch(event)
@@ -47,7 +60,33 @@ export class DomainEvents {
     return found;
   }
 
+  /**
+   * @method dispatchEventsForAggregate
+   * @static
+   * @desc When all we know is the ID of the aggregate, call this
+   * in order to dispatch any handlers subscribed to events on the
+   * aggregate.
+   */
   public static dispatchEventsForAggregate(id: UniqueEntityID): void {
+    // Who dictates when a transaction is complete?
+    // What should call dispatchEventsForAggregate method?
+
+    // For most simple scenarios,
+    // I leave this single responsibility of knowing if the transaction was successful
+    // in the ORM being used in the project.
+
+    // The thing is, a lot of these ORMs actually have mechanisms built in
+    // to execute code after things get saved to the database.
+    // They're usually called hooks.
+
+    // infra/sequelize/hooks/index.ts
+
+    // The benefit of this approach is
+    // its ability to keep the infrastructural concerns of a transaction
+    // out of the application and domain layers.
+
+    // To be fair, you totally could use Node.js EventEmitter
+
     const aggregate = this.findMarkedAggregateByID(id);
 
     if (aggregate) {
@@ -77,6 +116,11 @@ export class DomainEvents {
     this.markedAggregates = [];
   }
 
+  /**
+   * @method dispatch
+   * @static
+   * @desc Invokes all of the subscribers to a particular domain event.
+   */
   private static dispatch(event: IDomainEvent): void {
     const eventClassName: string = event.constructor.name;
 
