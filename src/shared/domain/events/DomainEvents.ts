@@ -3,7 +3,7 @@ import { AggregateRoot } from "../AggregateRoot";
 import { UniqueEntityID } from "../UniqueEntityID";
 
 export class DomainEvents {
-  // The handlersMap is an Identity map of Domain Event names 
+  // The handlersMap is an Identity map of Domain Event names
   // to callback functions.
   // {
   //   "UserCreated": [Function, Function, Function],
@@ -40,6 +40,11 @@ export class DomainEvents {
     );
   }
 
+  /**
+   * @method removeAggregateFromMarkedDispatchList
+   * @static
+   * @desc Removes an aggregate from the marked list.
+   */
   private static removeAggregateFromMarkedDispatchList(
     aggregate: AggregateRoot<any>
   ): void {
@@ -47,6 +52,11 @@ export class DomainEvents {
     this.markedAggregates.splice(index, 1);
   }
 
+  /**
+   * @method removeAggregateFromMarkedDispatchList
+   * @static
+   * @desc Removes an aggregate from the marked list.
+   */
   private static findMarkedAggregateByID(
     id: UniqueEntityID
   ): AggregateRoot<any> {
@@ -96,6 +106,11 @@ export class DomainEvents {
     }
   }
 
+  /**
+   * @method register
+   * @static
+   * @desc Register a handler to a domain event.
+   */
   public static register(
     callback: (event: IDomainEvent) => void,
     eventClassName: string
@@ -108,10 +123,20 @@ export class DomainEvents {
     this.handlersMap[eventClassName].push(callback);
   }
 
+  /**
+   * @method clearHandlers
+   * @static
+   * @desc Useful for testing.
+   */
   public static clearHandlers(): void {
     this.handlersMap = {};
   }
 
+  /**
+   * @method clearMarkedAggregates
+   * @static
+   * @desc Useful for testing.
+   */
   public static clearMarkedAggregates(): void {
     this.markedAggregates = [];
   }
