@@ -1,10 +1,14 @@
-# DDDForum
+<h1 align="center">DDDForum</h1>
 
-![img.png](images/logo.png)
+<p align="center">
+ <img src="https://raw.githubusercontent.com/dyarleniber/typescript-ddd-forum/main/images/logo.png">
+</p>
 
 Hacker news-inspired forum app built with TypeScript using Clean Architecture, SOLID principles, and DDD best practices from [solidbook.io](https://solidbook.io).
 
 DDDForum is the application built in [solidbook.io - The Software Design and Architecture Handbook](https://solidbook.io).
+
+![DDDForum](https://raw.githubusercontent.com/dyarleniber/typescript-ddd-forum/main/images/demo.png)
 
 [You can visit the demo site here](https://dddforum.com).
 
@@ -55,8 +59,8 @@ Each subdomain has a:
 
 - `domain` layer: where the highest-level policy, domain objects, and domain rules belong (`user`, `email`, etc)
 - `application` layer: where the use cases / features that utilize domain objects belong (`createUser`, `login`, etc)
-- `adapter` layer: where we define abstractions so that `application` layer code can interact with `infrastructure` layer concepts, without actually requiring on `infrastructure` (because that would break the [dependency rule](https://khalilstemmler.com/wiki/dependency-rule/)). Here we write things like `IUserRepo` - repository adapter, `IJWTTokenService` - an abstraction of a cache (redis) that manages tokens, etc.
-- `infrastructure` layer: where we create [concrete](https://khalilstemmler.com/wiki/concrete-class/) implementations of the abstractions from the `adapter` layer so that they can be spun up at runtime thanks to the power of polymorhpism.
+- `adapter` layer: where we define abstractions so that `application` layer code can interact with `infrastructure` layer concepts, without actually requiring on `infrastructure` (because that would break the dependency rule). Here we write things like `IUserRepo` - repository adapter, `IJWTTokenService` - an abstraction of a cache (redis) that manages tokens, etc.
+- `infrastructure` layer: where we create concrete implementations of the abstractions from the `adapter` layer so that they can be spun up at runtime thanks to the power of polymorphism.
 
 Some actual concepts that exist in each subdomain:
 
@@ -64,10 +68,10 @@ Some actual concepts that exist in each subdomain:
 
 In the` users` subdomain, we're only concerned with concepts that are related to authentication, roles, etc. Here are a few examples of classes and concepts that exist at each layer.
 
-- `domain` layer: `user` ([aggregate root](https://khalilstemmler.com/articles/typescript-domain-driven-design/aggregate-design-persistence/)), `userEmail` ([value object](https://khalilstemmler.com/articles/typescript-value-object/)), `userCreated` ([domain event](https://khalilstemmler.com/articles/typescript-domain-driven-design/chain-business-logic-domain-events/)).
-- `application` layer: `createUserUseCase` ([use case](https://khalilstemmler.com/articles/enterprise-typescript-nodejs/application-layer-use-cases/)), `getUserByUserName` (use case).
-- `adapter` layer: `IUserRepo` ([respository](https://khalilstemmler.com/articles/typescript-domain-driven-design/repository-dto-mapper/) interface adapter)
-- `infrastructure` layer: `SequelizeUserRepo` (a concrete implementation of the IUserRepo), `UserDTO` ([data transmission objects](https://khalilstemmler.com/articles/typescript-domain-driven-design/repository-dto-mapper/)).
+- `domain` layer: `user` (aggregate root), `userEmail` (value object), `userCreated` (domain event).
+- `application` layer: `createUserUseCase` (use case), `getUserByUserName` (use case).
+- `adapter` layer: `IUserRepo` (repository interface adapter).
+- `infrastructure` layer: `SequelizeUserRepo` (a concrete implementation of the IUserRepo), `UserDTO` (data transmission objects).
 
 #### `forum` subdomain
 
