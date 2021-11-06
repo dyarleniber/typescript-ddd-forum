@@ -1,4 +1,3 @@
-
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Result } from "../../../shared/core/Result";
@@ -14,40 +13,42 @@ interface CommentVoteProps {
 }
 
 export class CommentVote extends Entity<CommentVoteProps> {
-
-  get id (): UniqueEntityID {
+  get id(): UniqueEntityID {
     return this._id;
   }
 
-  get commentId (): CommentId {
+  get commentId(): CommentId {
     return this.props.commentId;
   }
 
-  get memberId (): MemberId {
+  get memberId(): MemberId {
     return this.props.memberId;
   }
 
-  get type (): VoteType {
+  get type(): VoteType {
     return this.props.type;
   }
 
-  public isUpvote (): boolean {
-    return this.props.type === 'UPVOTE';
+  public isUpvote(): boolean {
+    return this.props.type === "UPVOTE";
   }
 
-  public isDownvote (): boolean {
-    return this.props.type === 'DOWNVOTE';
+  public isDownvote(): boolean {
+    return this.props.type === "DOWNVOTE";
   }
 
-  private constructor (props: CommentVoteProps, id?: UniqueEntityID) {
+  private constructor(props: CommentVoteProps, id?: UniqueEntityID) {
     super(props, id);
   }
 
-  public static create (props: CommentVoteProps, id?: UniqueEntityID): Result<CommentVote> {
+  public static create(
+    props: CommentVoteProps,
+    id?: UniqueEntityID
+  ): Result<CommentVote> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.memberId, argumentName: 'memberId' },
-      { argument: props.commentId, argumentName: 'commentId' },
-      { argument: props.type, argumentName: 'type' }
+      { argument: props.memberId, argumentName: "memberId" },
+      { argument: props.commentId, argumentName: "commentId" },
+      { argument: props.type, argumentName: "type" },
     ]);
 
     if (!guardResult.succeeded) {
@@ -57,9 +58,12 @@ export class CommentVote extends Entity<CommentVoteProps> {
     }
   }
 
-  public static createUpvote (memberId: MemberId, commentId: CommentId): Result<CommentVote> {
-    const memberGuard = Guard.againstNullOrUndefined(memberId, 'memberId');
-    const postGuard = Guard.againstNullOrUndefined(commentId, 'commentId');
+  public static createUpvote(
+    memberId: MemberId,
+    commentId: CommentId
+  ): Result<CommentVote> {
+    const memberGuard = Guard.againstNullOrUndefined(memberId, "memberId");
+    const postGuard = Guard.againstNullOrUndefined(commentId, "commentId");
 
     if (!memberGuard.succeeded) {
       return Result.fail<CommentVote>(memberGuard.message);
@@ -69,16 +73,21 @@ export class CommentVote extends Entity<CommentVoteProps> {
       return Result.fail<CommentVote>(postGuard.message);
     }
 
-    return Result.ok<CommentVote>(new CommentVote({
-      memberId,
-      commentId,
-      type: 'UPVOTE',
-    }));
+    return Result.ok<CommentVote>(
+      new CommentVote({
+        memberId,
+        commentId,
+        type: "UPVOTE",
+      })
+    );
   }
 
-  public static createDownvote (memberId: MemberId, commentId: CommentId): Result<CommentVote> {
-    const memberGuard = Guard.againstNullOrUndefined(memberId, 'memberId');
-    const postGuard = Guard.againstNullOrUndefined(commentId, 'commentId');
+  public static createDownvote(
+    memberId: MemberId,
+    commentId: CommentId
+  ): Result<CommentVote> {
+    const memberGuard = Guard.againstNullOrUndefined(memberId, "memberId");
+    const postGuard = Guard.againstNullOrUndefined(commentId, "commentId");
 
     if (!memberGuard.succeeded) {
       return Result.fail<CommentVote>(memberGuard.message);
@@ -88,10 +97,12 @@ export class CommentVote extends Entity<CommentVoteProps> {
       return Result.fail<CommentVote>(postGuard.message);
     }
 
-    return Result.ok<CommentVote>(new CommentVote({
-      memberId,
-      commentId,
-      type: 'DOWNVOTE',
-    }));
+    return Result.ok<CommentVote>(
+      new CommentVote({
+        memberId,
+        commentId,
+        type: "DOWNVOTE",
+      })
+    );
   }
 }

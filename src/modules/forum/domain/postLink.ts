@@ -1,4 +1,3 @@
-
 import { ValueObject } from "../../../shared/domain/ValueObject";
 import { Result } from "../../../shared/core/Result";
 import { Guard } from "../../../shared/core/Guard";
@@ -9,21 +8,20 @@ interface PostLinkProps {
 }
 
 export class PostLink extends ValueObject<PostLinkProps> {
-  
-  get url (): string {
+  get url(): string {
     return this.props.url;
   }
 
-  private constructor (props: PostLinkProps) {
+  private constructor(props: PostLinkProps) {
     super(props);
-  };
+  }
 
-  public static create (props: PostLinkProps): Result<PostLink> {
-    const nullGuard = Guard.againstNullOrUndefined(props.url, 'url');
-    
+  public static create(props: PostLinkProps): Result<PostLink> {
+    const nullGuard = Guard.againstNullOrUndefined(props.url, "url");
+
     if (!nullGuard.succeeded) {
       return Result.fail<PostLink>(nullGuard.message);
-    } 
+    }
 
     if (!TextUtils.validateWebURL(props.url)) {
       return Result.fail<PostLink>(`Url {${props.url}} is not valid.`);

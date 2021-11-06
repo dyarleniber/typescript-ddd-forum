@@ -1,4 +1,3 @@
-
 import { MemberDTO } from "./memberDTO";
 
 export interface CommentDTO {
@@ -14,4 +13,3 @@ export interface CommentDTO {
   wasUpvotedByMe: boolean;
   wasDownvotedByMe: boolean;
 }
-

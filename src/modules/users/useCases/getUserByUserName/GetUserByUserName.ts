@@ -1,4 +1,3 @@
-
 import { GetUserByUserNameDTO } from "./GetUserByUserNameDTO";
 import { GetUserByUserNameErrors } from "./GetUserByUserNameErrors";
 import { left, Result, Either, right } from "../../../../shared/core/Result";
@@ -8,19 +7,18 @@ import { UseCase } from "../../../../shared/core/UseCase";
 import { AppError } from "../../../../shared/core/AppError";
 import { User } from "../../domain/user";
 
-type Response = Either<
-  AppError.UnexpectedError,
-  Result<User>
->
+type Response = Either<AppError.UnexpectedError, Result<User>>;
 
-export class GetUserByUserName implements UseCase<GetUserByUserNameDTO, Promise<Response>> {
+export class GetUserByUserName
+  implements UseCase<GetUserByUserNameDTO, Promise<Response>>
+{
   private userRepo: IUserRepo;
-  
-  constructor (userRepo: IUserRepo) {
+
+  constructor(userRepo: IUserRepo) {
     this.userRepo = userRepo;
   }
 
-  public async execute (request: GetUserByUserNameDTO): Promise<Response> {
+  public async execute(request: GetUserByUserNameDTO): Promise<Response> {
     try {
       const userNameOrError = UserName.create({ name: request.username });
 
@@ -38,12 +36,12 @@ export class GetUserByUserName implements UseCase<GetUserByUserNameDTO, Promise<
       if (!userFound) {
         return left(
           new GetUserByUserNameErrors.UserNotFoundError(userName.value)
-        ) as Response
+        ) as Response;
       }
 
       return right(Result.ok<User>(user));
     } catch (err) {
-      return left(new AppError.UnexpectedError(err))
-    }    
+      return left(new AppError.UnexpectedError(err));
+    }
   }
 }

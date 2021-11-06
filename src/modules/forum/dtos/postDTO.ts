@@ -1,4 +1,3 @@
-
 import { MemberDTO } from "./memberDTO";
 import { PostType } from "../domain/postType";
 
@@ -15,4 +14,3 @@ export interface PostDTO {
   wasUpvotedByMe: boolean;
   wasDownvotedByMe: boolean;
 }
-

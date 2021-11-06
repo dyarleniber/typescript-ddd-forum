@@ -1,4 +1,3 @@
-
 import { ValueObject } from "../../../shared/domain/ValueObject";
 import { Result } from "../../../shared/core/Result";
 import { Guard } from "../../../shared/core/Guard";
@@ -16,42 +15,42 @@ interface MemberDetailsProps {
  */
 
 export class MemberDetails extends ValueObject<MemberDetailsProps> {
-
-  get username (): UserName {
+  get username(): UserName {
     return this.props.username;
   }
 
-  get reputation (): number {
+  get reputation(): number {
     return this.props.reputation;
   }
 
-  get isAdminUser (): boolean {
+  get isAdminUser(): boolean {
     return this.props.isAdminUser;
   }
 
-  get isDeleted (): boolean {
+  get isDeleted(): boolean {
     return this.props.isDeleted;
   }
 
-  private constructor (props: MemberDetailsProps) {
+  private constructor(props: MemberDetailsProps) {
     super(props);
   }
 
-  public static create (props: MemberDetailsProps): Result<MemberDetails> {
+  public static create(props: MemberDetailsProps): Result<MemberDetails> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.username, argumentName: 'username' },
-      { argument: props.reputation, argumentName: 'reputation' }
+      { argument: props.username, argumentName: "username" },
+      { argument: props.reputation, argumentName: "reputation" },
     ]);
 
     if (!guardResult.succeeded) {
       return Result.fail<MemberDetails>(guardResult.message);
     }
 
-    return Result.ok<MemberDetails>(new MemberDetails({
-      ...props,
-      isAdminUser: props.isAdminUser ? props.isAdminUser : false,
-      isDeleted: props.isDeleted ? props.isDeleted : false
-    }));
-
+    return Result.ok<MemberDetails>(
+      new MemberDetails({
+        ...props,
+        isAdminUser: props.isAdminUser ? props.isAdminUser : false,
+        isDeleted: props.isDeleted ? props.isDeleted : false,
+      })
+    );
   }
 }

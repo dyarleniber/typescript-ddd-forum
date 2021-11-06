@@ -1,4 +1,3 @@
-
 import { PostType } from "../../../domain/postType";
 
 export interface CreatePostDTO {

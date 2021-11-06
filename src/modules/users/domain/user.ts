@@ -37,59 +37,58 @@ interface UserProps {
  * object that we perform commands against.
  */
 export class User extends AggregateRoot<UserProps> {
-  get userId (): UserId {
-    return UserId.create(this._id)
-      .getValue();
+  get userId(): UserId {
+    return UserId.create(this._id).getValue();
   }
 
-  get email (): UserEmail {
+  get email(): UserEmail {
     return this.props.email;
   }
 
-  get username (): UserName {
+  get username(): UserName {
     return this.props.username;
   }
 
-  get password (): UserPassword {
+  get password(): UserPassword {
     return this.props.password;
   }
 
-  get accessToken (): string {
+  get accessToken(): string {
     return this.props.accessToken;
   }
 
-  get isDeleted (): boolean {
+  get isDeleted(): boolean {
     return this.props.isDeleted;
   }
 
-  get isEmailVerified (): boolean {
+  get isEmailVerified(): boolean {
     return this.props.isEmailVerified;
   }
 
-  get isAdminUser (): boolean {
+  get isAdminUser(): boolean {
     return this.props.isAdminUser;
   }
 
-  get lastLogin (): Date {
+  get lastLogin(): Date {
     return this.props.lastLogin;
   }
 
-  get refreshToken (): RefreshToken {
-    return this.props.refreshToken
+  get refreshToken(): RefreshToken {
+    return this.props.refreshToken;
   }
 
-  public isLoggedIn (): boolean {
-    return !!this.props.accessToken && !!this.props.refreshToken
+  public isLoggedIn(): boolean {
+    return !!this.props.accessToken && !!this.props.refreshToken;
   }
 
-  public setAccessToken (token: JWTToken, refreshToken: RefreshToken): void {
+  public setAccessToken(token: JWTToken, refreshToken: RefreshToken): void {
     this.addDomainEvent(new UserLoggedIn(this));
     this.props.accessToken = token;
     this.props.refreshToken = refreshToken;
     this.props.lastLogin = new Date();
   }
 
-  public delete (): void {
+  public delete(): void {
     if (!this.props.isDeleted) {
       this.addDomainEvent(new UserDeleted(this));
       this.props.isDeleted = true;

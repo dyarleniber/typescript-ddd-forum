@@ -1,4 +1,3 @@
-
 import { ValueObject } from "../../../shared/domain/ValueObject";
 import { PostLink } from "./postLink";
 import { PostText } from "./postText";
@@ -25,70 +24,69 @@ interface PostDetailsProps {
 }
 
 export class PostDetails extends ValueObject<PostDetailsProps> {
-
-  get member (): MemberDetails {
+  get member(): MemberDetails {
     return this.props.member;
   }
 
-  get slug (): PostSlug {
+  get slug(): PostSlug {
     return this.props.slug;
   }
 
-  get title (): PostTitle {
+  get title(): PostTitle {
     return this.props.title;
   }
 
-  get postType (): PostType {
+  get postType(): PostType {
     return this.props.type;
   }
 
-  get text (): PostText {
+  get text(): PostText {
     return this.props.text;
   }
 
-  get link (): PostLink {
+  get link(): PostLink {
     return this.props.link;
   }
 
-  get numComments (): number {
+  get numComments(): number {
     return this.props.numComments;
   }
 
-  get points (): number {
+  get points(): number {
     return this.props.points;
   }
 
-  get dateTimePosted (): string | Date {
+  get dateTimePosted(): string | Date {
     return this.props.dateTimePosted;
   }
 
-  get wasUpvotedByMe (): boolean {
+  get wasUpvotedByMe(): boolean {
     return this.props.wasUpvotedByMe;
   }
 
-  get wasDownvotedByMe (): boolean {
+  get wasDownvotedByMe(): boolean {
     return this.props.wasDownvotedByMe;
   }
 
-  private constructor (props: PostDetailsProps) {
+  private constructor(props: PostDetailsProps) {
     super(props);
   }
 
-  public static create (props: PostDetailsProps): Result<PostDetails> {
+  public static create(props: PostDetailsProps): Result<PostDetails> {
     const guardArgs: IGuardArgument[] = [
-      { argument: props.member, argumentName: 'member' },
-      { argument: props.slug, argumentName: 'slug' },
-      { argument: props.title, argumentName: 'title' },
-      { argument: props.type, argumentName: 'type' },
-      { argument: props.numComments, argumentName: 'numComments' },
-      { argument: props.points, argumentName: 'points' },
-      { argument: props.dateTimePosted, argumentName: 'dateTimePosted' },
+      { argument: props.member, argumentName: "member" },
+      { argument: props.slug, argumentName: "slug" },
+      { argument: props.title, argumentName: "title" },
+      { argument: props.type, argumentName: "type" },
+      { argument: props.numComments, argumentName: "numComments" },
+      { argument: props.points, argumentName: "points" },
+      { argument: props.dateTimePosted, argumentName: "dateTimePosted" },
     ];
 
-    if (props.type === 'link') {
-      guardArgs.push({ argument: props.link, argumentName: 'link' })
+    if (props.type === "link") {
+      guardArgs.push({ argument: props.link, argumentName: "link" });
     } else {
-      guardArgs.push({ argument: props.text, argumentName: 'text' })
+      guardArgs.push({ argument: props.text, argumentName: "text" });
     }
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardArgs);
@@ -98,13 +96,17 @@ export class PostDetails extends ValueObject<PostDetailsProps> {
     }
 
     if (!Post.isValidPostType(props.type)) {
-      return Result.fail<PostDetails>("Invalid post type provided.")
+      return Result.fail<PostDetails>("Invalid post type provided.");
     }
 
-    return Result.ok<PostDetails>(new PostDetails({
-      ...props,
-      wasUpvotedByMe: props.wasUpvotedByMe ? props.wasUpvotedByMe : false,
-      wasDownvotedByMe: props.wasDownvotedByMe ? props.wasDownvotedByMe : false
-    }));
+    return Result.ok<PostDetails>(
+      new PostDetails({
+        ...props,
+        wasUpvotedByMe: props.wasUpvotedByMe ? props.wasUpvotedByMe : false,
+        wasDownvotedByMe: props.wasDownvotedByMe
+          ? props.wasDownvotedByMe
+          : false,
+      })
+    );
   }
 }

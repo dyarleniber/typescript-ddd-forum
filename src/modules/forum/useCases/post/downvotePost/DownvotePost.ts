@@ -1,4 +1,3 @@
-
 import { UseCase } from "../../../../../shared/core/UseCase";
 import { IMemberRepo } from "../../../repos/memberRepo";
 import { IPostRepo } from "../../../repos/postRepo";
@@ -13,36 +12,36 @@ import { DownvotePostResponse } from "./DownvotePostResponse";
 import { DownvotePostDTO } from "./DownvotePostDTO";
 import { DownvotePostErrors } from "./DownvotePostErrors";
 
-export class DownvotePost implements UseCase<DownvotePostDTO, Promise<DownvotePostResponse>> {
-  
+export class DownvotePost
+  implements UseCase<DownvotePostDTO, Promise<DownvotePostResponse>>
+{
   private memberRepo: IMemberRepo;
   private postRepo: IPostRepo;
   private postVotesRepo: IPostVotesRepo;
   private postService: PostService;
-  
-  constructor (
-    memberRepo: IMemberRepo, 
-    postRepo: IPostRepo, 
-    postVotesRepo: IPostVotesRepo, 
+
+  constructor(
+    memberRepo: IMemberRepo,
+    postRepo: IPostRepo,
+    postVotesRepo: IPostVotesRepo,
     postService: PostService
   ) {
     this.memberRepo = memberRepo;
     this.postRepo = postRepo;
-    this.postVotesRepo = postVotesRepo
+    this.postVotesRepo = postVotesRepo;
     this.postService = postService;
   }
 
-  public async execute (req: DownvotePostDTO): Promise<DownvotePostResponse> {
+  public async execute(req: DownvotePostDTO): Promise<DownvotePostResponse> {
     let member: Member;
     let post: Post;
     let existingVotesOnPostByMember: PostVote[];
 
     try {
-      
       try {
         member = await this.memberRepo.getMemberByUserId(req.userId);
       } catch (err) {
-        return left(new DownvotePostErrors.MemberNotFoundError())
+        return left(new DownvotePostErrors.MemberNotFoundError());
       }
 
       try {
@@ -51,20 +50,25 @@ export class DownvotePost implements UseCase<DownvotePostDTO, Promise<DownvotePo
         return left(new DownvotePostErrors.PostNotFoundError(req.slug));
       }
 
-      existingVotesOnPostByMember = await this.postVotesRepo
-        .getVotesForPostByMemberId(post.postId, member.memberId);
+      existingVotesOnPostByMember =
+        await this.postVotesRepo.getVotesForPostByMemberId(
+          post.postId,
+          member.memberId
+        );
 
-      const downvotePostResult = this.postService
-        .downvotePost(post, member, existingVotesOnPostByMember)
+      const downvotePostResult = this.postService.downvotePost(
+        post,
+        member,
+        existingVotesOnPostByMember
+      );
 
       if (downvotePostResult.isLeft()) {
         return left(downvotePostResult.value);
       }
-      
+
       await this.postRepo.save(post);
 
-      return right(Result.ok<void>())
-
+      return right(Result.ok<void>());
     } catch (err) {
       return left(new AppError.UnexpectedError(err));
     }

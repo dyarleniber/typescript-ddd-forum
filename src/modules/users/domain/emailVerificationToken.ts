@@ -1,4 +1,3 @@
-
 import { Result } from "../../../shared/core/Result";
 import { ValueObject } from "../../../shared/domain/ValueObject";
 
@@ -8,55 +7,58 @@ interface IEmailTokenProps {
 }
 
 export class EmailVerificationToken extends ValueObject<IEmailTokenProps> {
-
   private static numberDigits = 4;
   private static tokenExpiryHours = 6;
 
-  get value (): IEmailTokenProps {
+  get value(): IEmailTokenProps {
     return this.props;
   }
 
-  get token (): string {
+  get token(): string {
     return this.props.token;
   }
 
-  get expiry (): Date {
+  get expiry(): Date {
     return this.props.expiry;
   }
 
-  public isCodeExpired (): boolean {
+  public isCodeExpired(): boolean {
     const date = new Date();
     return date > this.expiry;
   }
 
-  public isCodeValid (code: string): boolean {
-    return this.token.toUpperCase() === code.toUpperCase() && !this.isCodeExpired();
+  public isCodeValid(code: string): boolean {
+    return (
+      this.token.toUpperCase() === code.toUpperCase() && !this.isCodeExpired()
+    );
   }
 
-  public toJSON (): string {
+  public toJSON(): string {
     return JSON.stringify({
       token: this.token,
-      expiry: this.expiry
-    })
+      expiry: this.expiry,
+    });
   }
 
-  private constructor (props: IEmailTokenProps) {
+  private constructor(props: IEmailTokenProps) {
     super(props);
   }
 
-  public static create (rawToken?: string): Result<EmailVerificationToken> {
+  public static create(rawToken?: string): Result<EmailVerificationToken> {
     if (rawToken) {
       const props: IEmailTokenProps = JSON.parse(rawToken);
 
-      return Result.ok<EmailVerificationToken>(new EmailVerificationToken({
-        ...props,
-        expiry: new Date(props.expiry)
-      }));
+      return Result.ok<EmailVerificationToken>(
+        new EmailVerificationToken({
+          ...props,
+          expiry: new Date(props.expiry),
+        })
+      );
     }
 
     //create random 4 character token
-    const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
-    let token = '';
+    const chars = "0123456789abcdefghijklmnopqrstuvwxyz";
+    let token = "";
 
     for (let i = this.numberDigits; i > 0; --i) {
       token += chars[Math.round(Math.random() * (chars.length - 1))];
@@ -68,9 +70,11 @@ export class EmailVerificationToken extends ValueObject<IEmailTokenProps> {
     const expires = new Date();
     expires.setHours(expires.getHours() + this.tokenExpiryHours);
 
-    return Result.ok<EmailVerificationToken>(new EmailVerificationToken({
-      token: token,
-      expiry: expires
-    }))
+    return Result.ok<EmailVerificationToken>(
+      new EmailVerificationToken({
+        token: token,
+        expiry: expires,
+      })
+    );
   }
 }

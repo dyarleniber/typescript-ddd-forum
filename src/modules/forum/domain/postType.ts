@@ -1,2 +1,1 @@
-
-export type PostType = 'text' | 'link';
+export type PostType = "text" | "link";

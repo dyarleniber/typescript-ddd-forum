@@ -1,5 +1,3 @@
-
-
 import { IDomainEvent } from "../../../../shared/domain/events/IDomainEvent";
 import { UniqueEntityID } from "../../../../shared/domain/UniqueEntityID";
 import { Post } from "../post";
@@ -10,13 +8,13 @@ export class PostVotesChanged implements IDomainEvent {
   public post: Post;
   public vote: PostVote;
 
-  constructor (post: Post, vote: PostVote) {
+  constructor(post: Post, vote: PostVote) {
     this.dateTimeOccurred = new Date();
     this.post = post;
-    this.vote = vote
+    this.vote = vote;
   }
-  
-  getAggregateId (): UniqueEntityID {
+
+  getAggregateId(): UniqueEntityID {
     return this.post.id;
   }
 }

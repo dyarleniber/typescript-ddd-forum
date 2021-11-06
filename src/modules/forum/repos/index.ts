@@ -1,4 +1,3 @@
-
 import { MemberRepo } from "./implementations/sequelizeMemberRepo";
 import models from "../../../shared/infra/database/sequelize/models";
 import { PostRepo } from "./implementations/sequelizePostRepo";

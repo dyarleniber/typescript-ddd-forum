@@ -1,4 +1,1 @@
-
-export interface DomainService {
-
-}
+export interface DomainService {}

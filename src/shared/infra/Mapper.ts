@@ -1,4 +1,1 @@
-
-export interface Mapper<T> {
-  
-}
+export interface Mapper<T> {}

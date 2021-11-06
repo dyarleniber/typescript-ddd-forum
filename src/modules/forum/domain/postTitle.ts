@@ -1,4 +1,3 @@
-
 import { ValueObject } from "../../../shared/domain/ValueObject";
 import { Result } from "../../../shared/core/Result";
 import { Guard } from "../../../shared/core/Guard";
@@ -11,17 +10,19 @@ export class PostTitle extends ValueObject<PostTitleProps> {
   public static minLength: number = 2;
   public static maxLength: number = 85;
 
-  get value (): string {
+  get value(): string {
     return this.props.value;
   }
 
-  private constructor (props: PostTitleProps) {
+  private constructor(props: PostTitleProps) {
     super(props);
   }
 
-  public static create (props: PostTitleProps): Result<PostTitle> {
-
-    const nullGuardResult = Guard.againstNullOrUndefined(props.value, 'postTitle');
+  public static create(props: PostTitleProps): Result<PostTitle> {
+    const nullGuardResult = Guard.againstNullOrUndefined(
+      props.value,
+      "postTitle"
+    );
 
     if (!nullGuardResult.succeeded) {
       return Result.fail<PostTitle>(nullGuardResult.message);

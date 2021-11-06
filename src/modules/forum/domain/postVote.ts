@@ -1,4 +1,3 @@
-
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Result } from "../../../shared/core/Result";
@@ -14,40 +13,42 @@ interface PostVoteProps {
 }
 
 export class PostVote extends Entity<PostVoteProps> {
-
-  get id (): UniqueEntityID {
+  get id(): UniqueEntityID {
     return this._id;
   }
 
-  get postId (): PostId {
+  get postId(): PostId {
     return this.props.postId;
   }
 
-  get memberId (): MemberId {
+  get memberId(): MemberId {
     return this.props.memberId;
   }
 
-  get type (): VoteType {
+  get type(): VoteType {
     return this.props.type;
   }
 
-  public isUpvote (): boolean {
-    return this.props.type === 'UPVOTE';
+  public isUpvote(): boolean {
+    return this.props.type === "UPVOTE";
   }
 
-  public isDownvote (): boolean {
-    return this.props.type === 'DOWNVOTE';
+  public isDownvote(): boolean {
+    return this.props.type === "DOWNVOTE";
   }
 
-  private constructor (props: PostVoteProps, id?: UniqueEntityID) {
+  private constructor(props: PostVoteProps, id?: UniqueEntityID) {
     super(props, id);
   }
 
-  public static create (props: PostVoteProps, id?: UniqueEntityID): Result<PostVote> {
+  public static create(
+    props: PostVoteProps,
+    id?: UniqueEntityID
+  ): Result<PostVote> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.memberId, argumentName: 'memberId' },
-      { argument: props.postId, argumentName: 'postId' },
-      { argument: props.type, argumentName: 'type' }
+      { argument: props.memberId, argumentName: "memberId" },
+      { argument: props.postId, argumentName: "postId" },
+      { argument: props.type, argumentName: "type" },
     ]);
 
     if (!guardResult.succeeded) {
@@ -57,9 +58,12 @@ export class PostVote extends Entity<PostVoteProps> {
     }
   }
 
-  public static createUpvote (memberId: MemberId, postId: PostId): Result<PostVote> {
-    const memberGuard = Guard.againstNullOrUndefined(memberId, 'memberId');
-    const postGuard = Guard.againstNullOrUndefined(postId, 'postId');
+  public static createUpvote(
+    memberId: MemberId,
+    postId: PostId
+  ): Result<PostVote> {
+    const memberGuard = Guard.againstNullOrUndefined(memberId, "memberId");
+    const postGuard = Guard.againstNullOrUndefined(postId, "postId");
 
     if (!memberGuard.succeeded) {
       return Result.fail<PostVote>(memberGuard.message);
@@ -69,16 +73,21 @@ export class PostVote extends Entity<PostVoteProps> {
       return Result.fail<PostVote>(postGuard.message);
     }
 
-    return Result.ok<PostVote>(new PostVote({
-      memberId,
-      postId,
-      type: 'UPVOTE',
-    }));
+    return Result.ok<PostVote>(
+      new PostVote({
+        memberId,
+        postId,
+        type: "UPVOTE",
+      })
+    );
   }
 
-  public static createDownvote (memberId: MemberId, postId: PostId): Result<PostVote> {
-    const memberGuard = Guard.againstNullOrUndefined(memberId, 'memberId');
-    const postGuard = Guard.againstNullOrUndefined(postId, 'postId');
+  public static createDownvote(
+    memberId: MemberId,
+    postId: PostId
+  ): Result<PostVote> {
+    const memberGuard = Guard.againstNullOrUndefined(memberId, "memberId");
+    const postGuard = Guard.againstNullOrUndefined(postId, "postId");
 
     if (!memberGuard.succeeded) {
       return Result.fail<PostVote>(memberGuard.message);
@@ -88,10 +97,12 @@ export class PostVote extends Entity<PostVoteProps> {
       return Result.fail<PostVote>(postGuard.message);
     }
 
-    return Result.ok<PostVote>(new PostVote({
-      memberId,
-      postId,
-      type: 'DOWNVOTE',
-    }));
+    return Result.ok<PostVote>(
+      new PostVote({
+        memberId,
+        postId,
+        type: "DOWNVOTE",
+      })
+    );
   }
 }

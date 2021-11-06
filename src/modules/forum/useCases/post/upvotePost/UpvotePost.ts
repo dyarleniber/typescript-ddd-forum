@@ -1,4 +1,3 @@
-
 import { UseCase } from "../../../../../shared/core/UseCase";
 import { UpvotePostDTO } from "./UpvotePostDTO";
 import { IMemberRepo } from "../../../repos/memberRepo";
@@ -13,30 +12,36 @@ import { PostVote } from "../../../domain/postVote";
 import { PostService } from "../../../domain/services/postService";
 import { UpvotePostResponse } from "./UpvotePostResponse";
 
-export class UpvotePost implements UseCase<UpvotePostDTO, Promise<UpvotePostResponse>> {
+export class UpvotePost
+  implements UseCase<UpvotePostDTO, Promise<UpvotePostResponse>>
+{
   private memberRepo: IMemberRepo;
   private postRepo: IPostRepo;
   private postVotesRepo: IPostVotesRepo;
   private postService: PostService;
-  
-  constructor (memberRepo: IMemberRepo, postRepo: IPostRepo, postVotesRepo: IPostVotesRepo, postService: PostService) {
+
+  constructor(
+    memberRepo: IMemberRepo,
+    postRepo: IPostRepo,
+    postVotesRepo: IPostVotesRepo,
+    postService: PostService
+  ) {
     this.memberRepo = memberRepo;
     this.postRepo = postRepo;
-    this.postVotesRepo = postVotesRepo
+    this.postVotesRepo = postVotesRepo;
     this.postService = postService;
   }
 
-  public async execute (req: UpvotePostDTO): Promise<UpvotePostResponse> {
+  public async execute(req: UpvotePostDTO): Promise<UpvotePostResponse> {
     let member: Member;
     let post: Post;
     let existingVotesOnPostByMember: PostVote[];
 
     try {
-      
       try {
         member = await this.memberRepo.getMemberByUserId(req.userId);
       } catch (err) {
-        return left(new UpvotePostErrors.MemberNotFoundError())
+        return left(new UpvotePostErrors.MemberNotFoundError());
       }
 
       try {
@@ -45,20 +50,25 @@ export class UpvotePost implements UseCase<UpvotePostDTO, Promise<UpvotePostResp
         return left(new UpvotePostErrors.PostNotFoundError(req.slug));
       }
 
-      existingVotesOnPostByMember = await this.postVotesRepo
-        .getVotesForPostByMemberId(post.postId,  member.memberId);
+      existingVotesOnPostByMember =
+        await this.postVotesRepo.getVotesForPostByMemberId(
+          post.postId,
+          member.memberId
+        );
 
-      const upvotePostResult = this.postService
-        .upvotePost(post, member, existingVotesOnPostByMember);
+      const upvotePostResult = this.postService.upvotePost(
+        post,
+        member,
+        existingVotesOnPostByMember
+      );
 
       if (upvotePostResult.isLeft()) {
         return left(upvotePostResult.value);
       }
-      
+
       await this.postRepo.save(post);
 
-      return right(Result.ok<void>())
-
+      return right(Result.ok<void>());
     } catch (err) {
       return left(new AppError.UnexpectedError(err));
     }

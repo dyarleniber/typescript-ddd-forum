@@ -4,18 +4,17 @@ import { CreatePostDTO } from "./CreatePostDTO";
 import { DecodedExpressRequest } from "../../../../users/infra/http/models/decodedRequest";
 import { CreatePostErrors } from "./CreatePostErrors";
 import { TextUtils } from "../../../../../shared/utils/TextUtils";
-import * as express from 'express'
-
+import * as express from "express";
 
 export class CreatePostController extends BaseController {
   private useCase: CreatePost;
 
-  constructor (useCase: CreatePost) {
+  constructor(useCase: CreatePost) {
     super();
     this.useCase = useCase;
   }
 
-  async executeImpl (req: DecodedExpressRequest, res: any): Promise<any> {
+  async executeImpl(req: DecodedExpressRequest, res: any): Promise<any> {
     const { userId } = req.decoded;
 
     const dto: CreatePostDTO = {
@@ -23,28 +22,26 @@ export class CreatePostController extends BaseController {
       text: !!req.body.text ? TextUtils.sanitize(req.body.text) : null,
       userId: userId,
       postType: req.body.postType,
-      link: !!req.body.link ? TextUtils.sanitize(req.body.link) : null
-    }
-  
+      link: !!req.body.link ? TextUtils.sanitize(req.body.link) : null,
+    };
+
     try {
       const result = await this.useCase.execute(dto);
 
       if (result.isLeft()) {
         const error = result.value;
-  
+
         switch (error.constructor) {
           case CreatePostErrors.MemberDoesntExistError:
-            return this.notFound(res, error.errorValue().message)
+            return this.notFound(res, error.errorValue().message);
           default:
             return this.fail(res, error.errorValue().message);
         }
-        
       } else {
         return this.ok(res);
       }
-
     } catch (err) {
-      return this.fail(res, err)
+      return this.fail(res, err);
     }
   }
 }

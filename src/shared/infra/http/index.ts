@@ -3,4 +3,4 @@ import { authService } from "../../../modules/users/services";
 
 const middleware = new Middleware(authService);
 
-export { middleware }
+export { middleware };

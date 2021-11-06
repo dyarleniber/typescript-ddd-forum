@@ -1,4 +1,3 @@
-
 import { PostDTO } from "../../../dtos/postDTO";
 
 export interface GetRecentPostsResponseDTO {

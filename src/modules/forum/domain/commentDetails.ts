@@ -1,4 +1,3 @@
-
 import { ValueObject } from "../../../shared/domain/ValueObject";
 import { Result } from "../../../shared/core/Result";
 import { CommentText } from "./commentText";
@@ -22,70 +21,73 @@ interface CommentDetailsProps {
 }
 
 export class CommentDetails extends ValueObject<CommentDetailsProps> {
-
-  get commentId (): CommentId {
+  get commentId(): CommentId {
     return this.props.commentId;
   }
 
-  get text (): CommentText {
+  get text(): CommentText {
     return this.props.text;
   }
 
-  get member (): MemberDetails {
+  get member(): MemberDetails {
     return this.props.member;
   }
 
-  get createdAt (): Date | string {
+  get createdAt(): Date | string {
     return this.props.createdAt;
   }
 
-  get postSlug (): PostSlug {
-    return this.props.postSlug
+  get postSlug(): PostSlug {
+    return this.props.postSlug;
   }
 
-  get postTitle (): PostTitle {
+  get postTitle(): PostTitle {
     return this.props.postTitle;
   }
 
-  get parentCommentId (): CommentId {
+  get parentCommentId(): CommentId {
     return this.props.parentCommentId;
   }
 
-  get points (): number {
+  get points(): number {
     return this.props.points;
   }
 
-  get wasUpvotedByMe (): boolean {
+  get wasUpvotedByMe(): boolean {
     return this.props.wasUpvotedByMe;
   }
 
-  get wasDownvotedByMe (): boolean {
+  get wasDownvotedByMe(): boolean {
     return this.props.wasDownvotedByMe;
   }
 
-  private constructor (props: CommentDetailsProps) {
+  private constructor(props: CommentDetailsProps) {
     super(props);
   }
 
-  public static create (props: CommentDetailsProps): Result<CommentDetails> {
+  public static create(props: CommentDetailsProps): Result<CommentDetails> {
     const nullGuard = Guard.againstNullOrUndefinedBulk([
-      { argument: props.commentId, argumentName: 'commentId' },
-      { argument: props.text, argumentName: 'text' },
-      { argument: props.member, argumentName: 'member' },
-      { argument: props.createdAt, argumentName: 'createdAt' },
-      { argument: props.postSlug, argumentName: 'postSlug' },
-      { argument: props.postTitle, argumentName: 'postTitle' },
-      { argument: props.points, argumentName: 'points' }
+      { argument: props.commentId, argumentName: "commentId" },
+      { argument: props.text, argumentName: "text" },
+      { argument: props.member, argumentName: "member" },
+      { argument: props.createdAt, argumentName: "createdAt" },
+      { argument: props.postSlug, argumentName: "postSlug" },
+      { argument: props.postTitle, argumentName: "postTitle" },
+      { argument: props.points, argumentName: "points" },
     ]);
 
     if (!nullGuard.succeeded) {
       return Result.fail<CommentDetails>(nullGuard.message);
     }
 
-    return Result.ok<CommentDetails>(new CommentDetails({
-      ...props,
-      wasUpvotedByMe: props.wasUpvotedByMe ? props.wasUpvotedByMe : false,
-      wasDownvotedByMe: props.wasDownvotedByMe ? props.wasDownvotedByMe : false,
-    }));
+    return Result.ok<CommentDetails>(
+      new CommentDetails({
+        ...props,
+        wasUpvotedByMe: props.wasUpvotedByMe ? props.wasUpvotedByMe : false,
+        wasDownvotedByMe: props.wasDownvotedByMe
+          ? props.wasDownvotedByMe
+          : false,
+      })
+    );
   }
 }

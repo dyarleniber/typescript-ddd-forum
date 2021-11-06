@@ -1,4 +1,3 @@
-
 import { ValueObject } from "../../../shared/domain/ValueObject";
 import { Result } from "../../../shared/core/Result";
 import { Guard } from "../../../shared/core/Guard";
@@ -11,16 +10,19 @@ export class PostText extends ValueObject<PostTextProps> {
   public static minLength: number = 2;
   public static maxLength: number = 10000;
 
-  get value (): string {
+  get value(): string {
     return this.props.value;
   }
 
-  private constructor (props: PostTextProps) {
+  private constructor(props: PostTextProps) {
     super(props);
   }
 
-  public static create (props: PostTextProps): Result<PostText> {
-    const nullGuardResult = Guard.againstNullOrUndefined(props.value, 'postText');
+  public static create(props: PostTextProps): Result<PostText> {
+    const nullGuardResult = Guard.againstNullOrUndefined(
+      props.value,
+      "postText"
+    );
 
     if (!nullGuardResult.succeeded) {
       return Result.fail<PostText>(nullGuardResult.message);

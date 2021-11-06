@@ -1,4 +1,3 @@
-
 import { ICommentVotesRepo } from "../commentVotesRepo";
 import { CommentVote } from "../../domain/commentVote";
 import { MemberId } from "../../domain/memberId";
@@ -11,27 +10,31 @@ import { PostId } from "../../domain/postId";
 export class CommentVotesRepo implements ICommentVotesRepo {
   private models: any;
 
-  constructor (models: any) {
+  constructor(models: any) {
     this.models = models;
   }
 
-  private createBaseQuery (): any {
+  private createBaseQuery(): any {
     return {
       where: {},
-    }
+    };
   }
 
-  async exists (commentId: CommentId, memberId: MemberId, voteType: VoteType): Promise<boolean> {
+  async exists(
+    commentId: CommentId,
+    memberId: MemberId,
+    voteType: VoteType
+  ): Promise<boolean> {
     const CommentVote = this.models.CommentVote;
     const baseQuery = this.createBaseQuery();
-    baseQuery.where['member_id'] = memberId.id.toString();
-    baseQuery.where['comment_id'] = commentId.id.toString();
-    baseQuery.where['type'] = voteType;
+    baseQuery.where["member_id"] = memberId.id.toString();
+    baseQuery.where["comment_id"] = commentId.id.toString();
+    baseQuery.where["type"] = voteType;
     const vote = await CommentVote.findOne(baseQuery);
     return !!vote === true;
   }
 
-  async saveBulk (votes: CommentVotes): Promise<any> {
+  async saveBulk(votes: CommentVotes): Promise<any> {
     for (let vote of votes.getRemovedItems()) {
       await this.delete(vote);
     }
@@ -41,10 +44,10 @@ export class CommentVotesRepo implements ICommentVotesRepo {
     }
   }
 
-  async save (vote: CommentVote): Promise<any> {
+  async save(vote: CommentVote): Promise<any> {
     const CommentVoteModel = this.models.CommentVote;
     const exists = await this.exists(vote.commentId, vote.memberId, vote.type);
-    const isNew = !exists
+    const isNew = !exists;
     const rawSequelizeCommentVote = CommentVoteMap.toPersistence(vote);
 
     if (isNew) {
@@ -54,33 +57,41 @@ export class CommentVotesRepo implements ICommentVotesRepo {
         throw new Error(err.toString());
       }
     } else {
-      throw new Error("Shouldn't be re-saving a vote. Only deleting and saving.");
+      throw new Error(
+        "Shouldn't be re-saving a vote. Only deleting and saving."
+      );
     }
   }
 
-  async delete (vote: CommentVote): Promise<any> {
+  async delete(vote: CommentVote): Promise<any> {
     const CommentVoteModel = this.models.CommentVote;
-    return CommentVoteModel.destroy({ 
-      where: { 
+    return CommentVoteModel.destroy({
+      where: {
         comment_id: vote.commentId.id.toString(),
-        member_id: vote.memberId.id.toString()
-      }
-    })
+        member_id: vote.memberId.id.toString(),
+      },
+    });
   }
 
-  async getVotesForCommentByMemberId (commentId: CommentId, memberId: MemberId): Promise<CommentVote[]> {
+  async getVotesForCommentByMemberId(
+    commentId: CommentId,
+    memberId: MemberId
+  ): Promise<CommentVote[]> {
     const CommentVote = this.models.CommentVote;
     const baseQuery = this.createBaseQuery();
-    baseQuery.where['member_id'] = memberId.id.toString();
-    baseQuery.where['comment_id'] = commentId.id.toString();
+    baseQuery.where["member_id"] = memberId.id.toString();
+    baseQuery.where["comment_id"] = commentId.id.toString();
     const votes = await CommentVote.findAll(baseQuery);
     return votes.map((v) => CommentVoteMap.toDomain(v));
   }
 
-  async countUpvotesForCommentByCommentId (commentId: CommentId | string): Promise<number> {
-    commentId  = commentId instanceof CommentId 
-    ? (<CommentId>commentId).id.toString() 
-    : commentId;
+  async countUpvotesForCommentByCommentId(
+    commentId: CommentId | string
+  ): Promise<number> {
+    commentId =
+      commentId instanceof CommentId
+        ? (<CommentId>commentId).id.toString()
+        : commentId;
 
     const result = await this.models.sequelize.query(
       `select COUNT(*) 
@@ -89,14 +100,17 @@ export class CommentVotesRepo implements ICommentVotesRepo {
         and type = "UPVOTE"`
     );
 
-    const count = result[0][0]['COUNT(*)'];
+    const count = result[0][0]["COUNT(*)"];
     return count;
   }
 
-  async countDownvotesForCommentByCommentId (commentId: CommentId | string): Promise<number> {
-    commentId  = commentId instanceof CommentId 
-    ? (<CommentId>commentId).id.toString() 
-    : commentId;
+  async countDownvotesForCommentByCommentId(
+    commentId: CommentId | string
+  ): Promise<number> {
+    commentId =
+      commentId instanceof CommentId
+        ? (<CommentId>commentId).id.toString()
+        : commentId;
 
     const result = await this.models.sequelize.query(
       `select COUNT(*) 
@@ -105,14 +119,14 @@ export class CommentVotesRepo implements ICommentVotesRepo {
         and type = "DOWNVOTE"`
     );
 
-    const count = result[0][0]['COUNT(*)'];
+    const count = result[0][0]["COUNT(*)"];
     return count;
   }
 
-  async countAllPostCommentUpvotesExcludingOP (postId: PostId | string): Promise<number> {
-    postId  = postId instanceof PostId 
-    ? (<PostId>postId).id.toString() 
-    : postId;
+  async countAllPostCommentUpvotesExcludingOP(
+    postId: PostId | string
+  ): Promise<number> {
+    postId = postId instanceof PostId ? (<PostId>postId).id.toString() : postId;
 
     const result = await this.models.sequelize.query(
       `SELECT COUNT(*) FROM (
@@ -127,14 +141,14 @@ export class CommentVotesRepo implements ICommentVotesRepo {
       ) as upvotes_total;`
     );
 
-    const count = result[0][0]['COUNT(*)'];
+    const count = result[0][0]["COUNT(*)"];
     return count;
   }
 
-  async countAllPostCommentDownvotesExcludingOP (postId: PostId | String): Promise<number> {
-    postId  = postId instanceof PostId 
-    ? (<PostId>postId).id.toString() 
-    : postId;
+  async countAllPostCommentDownvotesExcludingOP(
+    postId: PostId | String
+  ): Promise<number> {
+    postId = postId instanceof PostId ? (<PostId>postId).id.toString() : postId;
 
     const result = await this.models.sequelize.query(
       `SELECT COUNT(*) FROM (
@@ -149,14 +163,12 @@ export class CommentVotesRepo implements ICommentVotesRepo {
       ) as upvotes_total;`
     );
 
-    const count = result[0][0]['COUNT(*)'];
+    const count = result[0][0]["COUNT(*)"];
     return count;
   }
-  
-  async countAllPostCommentUpvotes (postId: PostId | string): Promise<number> {
-    postId  = postId instanceof PostId 
-    ? (<PostId>postId).id.toString() 
-    : postId;
+
+  async countAllPostCommentUpvotes(postId: PostId | string): Promise<number> {
+    postId = postId instanceof PostId ? (<PostId>postId).id.toString() : postId;
 
     const result = await this.models.sequelize.query(
       `SELECT COUNT(*) FROM (
@@ -170,14 +182,12 @@ export class CommentVotesRepo implements ICommentVotesRepo {
       ) as upvotes_total;`
     );
 
-    const count = result[0][0]['COUNT(*)'];
+    const count = result[0][0]["COUNT(*)"];
     return count;
   }
 
-  async countAllPostCommentDownvotes (postId: PostId | string): Promise<number> {
-    postId  = postId instanceof PostId 
-    ? (<PostId>postId).id.toString() 
-    : postId;
+  async countAllPostCommentDownvotes(postId: PostId | string): Promise<number> {
+    postId = postId instanceof PostId ? (<PostId>postId).id.toString() : postId;
 
     const result = await this.models.sequelize.query(
       `SELECT COUNT(*) FROM (
@@ -191,8 +201,7 @@ export class CommentVotesRepo implements ICommentVotesRepo {
       ) as downvotes_total;`
     );
 
-    const count = result[0][0]['COUNT(*)'];
+    const count = result[0][0]["COUNT(*)"];
     return count;
   }
-
 }

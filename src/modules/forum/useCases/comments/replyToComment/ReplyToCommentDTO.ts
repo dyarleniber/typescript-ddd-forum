@@ -1,4 +1,3 @@
-
 export interface ReplyToCommentDTO {
   slug: string;
   userId: string;

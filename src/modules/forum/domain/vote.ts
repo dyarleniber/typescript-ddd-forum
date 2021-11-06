@@ -1,2 +1,1 @@
-
-export type VoteType = 'UPVOTE' | 'DOWNVOTE';
+export type VoteType = "UPVOTE" | "DOWNVOTE";

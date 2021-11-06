@@ -1,4 +1,3 @@
-
 import { UseCase } from "../../../../../shared/core/UseCase";
 import { IMemberRepo } from "../../../repos/memberRepo";
 import { CreateMemberDTO } from "./CreateMemberDTO";
@@ -10,29 +9,30 @@ import { User } from "../../../../users/domain/user";
 import { Member } from "../../../domain/member";
 
 type Response = Either<
-  CreateMemberErrors.MemberAlreadyExistsError |
-  CreateMemberErrors.UserDoesntExistError |
-  AppError.UnexpectedError |
-  Result<any>,
+  | CreateMemberErrors.MemberAlreadyExistsError
+  | CreateMemberErrors.UserDoesntExistError
+  | AppError.UnexpectedError
+  | Result<any>,
   Result<void>
->
+>;
 
-export class CreateMember implements UseCase<CreateMemberDTO, Promise<Response>> {
+export class CreateMember
+  implements UseCase<CreateMemberDTO, Promise<Response>>
+{
   private memberRepo: IMemberRepo;
   private userRepo: IUserRepo;
 
-  constructor (userRepo: IUserRepo, memberRepo: IMemberRepo) {
+  constructor(userRepo: IUserRepo, memberRepo: IMemberRepo) {
     this.userRepo = userRepo;
-    this.memberRepo = memberRepo
+    this.memberRepo = memberRepo;
   }
 
-  public async execute (request: CreateMemberDTO): Promise<Response> {
+  public async execute(request: CreateMemberDTO): Promise<Response> {
     let user: User;
     let member: Member;
     const { userId } = request;
 
     try {
-
       try {
         user = await this.userRepo.getUserByUserId(userId);
       } catch (err) {
@@ -44,12 +44,12 @@ export class CreateMember implements UseCase<CreateMemberDTO, Promise<Response>>
         const memberExists = !!member === true;
 
         if (memberExists) {
-          return left(new CreateMemberErrors.MemberAlreadyExistsError(userId))
+          return left(new CreateMemberErrors.MemberAlreadyExistsError(userId));
         }
       } catch (err) {}
 
       // Member doesn't exist already (good), so we want to create it
-      const memberOrError: Result<Member> = Member.create({ 
+      const memberOrError: Result<Member> = Member.create({
         userId: user.userId,
         username: user.username,
       });
@@ -63,7 +63,6 @@ export class CreateMember implements UseCase<CreateMemberDTO, Promise<Response>>
       await this.memberRepo.save(member);
 
       return right(Result.ok<void>());
-      
     } catch (err) {
       return left(new AppError.UnexpectedError(err));
     }

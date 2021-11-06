@@ -1,5 +1,4 @@
-
-import { gql } from 'apollo-server-express'
+import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   enum PostType {
@@ -32,18 +31,15 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    postById (id: ID!): Post
-    postBySlug (slug: String!): Post
-    popularPosts (pageSize: Int, after: String): PostCollectionResult
-    recentPosts (pageSize: Int, after: String): PostCollectionResult
-    memberById (id: String!): Member
+    postById(id: ID!): Post
+    postBySlug(slug: String!): Post
+    popularPosts(pageSize: Int, after: String): PostCollectionResult
+    recentPosts(pageSize: Int, after: String): PostCollectionResult
+    memberById(id: String!): Member
   }
 
   extend type Mutation {
-    createPost (input: CreatePostInput!): CreatePostPayload
-    createMember (input: CreateMemberInput!): CreateMemberPayload
+    createPost(input: CreatePostInput!): CreatePostPayload
+    createMember(input: CreateMemberInput!): CreateMemberPayload
   }
-`
-
-
-
+`;

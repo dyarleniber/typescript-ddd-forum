@@ -1,4 +1,3 @@
-
 import { Mapper } from "../../../shared/infra/Mapper";
 import { PostDetails } from "../domain/postDetails";
 import { PostDTO } from "../dtos/postDTO";
@@ -12,15 +11,16 @@ import { PostVoteMap } from "./postVoteMap";
 import { PostVote } from "../domain/postVote";
 
 export class PostDetailsMap implements Mapper<PostDetails> {
-
-  public static toDomain (raw: any): PostDetails {
+  public static toDomain(raw: any): PostDetails {
     const slug = PostSlug.createFromExisting(raw.slug).getValue();
     const title = PostTitle.create({ value: raw.title }).getValue();
     const postType: PostType = raw.type;
 
     const memberDetails = MemberDetailsMap.toDomain(raw.Member);
 
-    const votes: PostVote[] = raw.Votes ? raw.Votes.map((v) => PostVoteMap.toDomain(v)) : [];
+    const votes: PostVote[] = raw.Votes
+      ? raw.Votes.map((v) => PostVoteMap.toDomain(v))
+      : [];
 
     const postDetailsOrError = PostDetails.create({
       slug,
@@ -30,18 +30,24 @@ export class PostDetailsMap implements Mapper<PostDetails> {
       numComments: raw.total_num_comments,
       dateTimePosted: raw.createdAt,
       member: memberDetails,
-      text: postType === 'text' ? PostText.create({ value: raw.text }).getValue() : null,
-      link: postType === 'link' ? PostLink.create({ url: raw.link }).getValue() : null,
+      text:
+        postType === "text"
+          ? PostText.create({ value: raw.text }).getValue()
+          : null,
+      link:
+        postType === "link"
+          ? PostLink.create({ url: raw.link }).getValue()
+          : null,
       wasUpvotedByMe: !!votes.find((v) => v.isUpvote()),
-      wasDownvotedByMe: !!votes.find((v) => v.isDownvote())
-    })
+      wasDownvotedByMe: !!votes.find((v) => v.isDownvote()),
+    });
 
-    postDetailsOrError.isFailure ? console.log(postDetailsOrError.error) : '';
+    postDetailsOrError.isFailure ? console.log(postDetailsOrError.error) : "";
 
     return postDetailsOrError.isSuccess ? postDetailsOrError.getValue() : null;
   }
 
-  public static toDTO (postDetails: PostDetails): PostDTO {
+  public static toDTO(postDetails: PostDetails): PostDTO {
     return {
       slug: postDetails.slug.value,
       title: postDetails.title.value,
@@ -49,11 +55,11 @@ export class PostDetailsMap implements Mapper<PostDetails> {
       memberPostedBy: MemberDetailsMap.toDTO(postDetails.member),
       numComments: postDetails.numComments,
       points: postDetails.points,
-      text: postDetails.text ? postDetails.text.value : '',
-      link: postDetails.link ? postDetails.link.url : '',
+      text: postDetails.text ? postDetails.text.value : "",
+      link: postDetails.link ? postDetails.link.url : "",
       type: postDetails.postType,
       wasUpvotedByMe: postDetails.wasUpvotedByMe,
-      wasDownvotedByMe: postDetails.wasDownvotedByMe
-    }
-  } 
+      wasDownvotedByMe: postDetails.wasDownvotedByMe,
+    };
+  }
 }
