@@ -1,0 +1,9 @@
+
+var path = require('path')
+
+module.exports = {
+  'config':          path.resolve('build', 'shared', 'infra', 'database', 'sequelize', 'config', 'config.js'),
+  'migrations-path': path.resolve('build', 'shared', 'infra', 'database', 'sequelize', 'migrations'),
+  'models-path': path.resolve('build', 'shared', 'infra', 'database', 'sequelize', 'models'),
+  'seeders-path': path.resolve('build', 'shared', 'infra', 'database', 'sequelize', 'seeders'),
+}
