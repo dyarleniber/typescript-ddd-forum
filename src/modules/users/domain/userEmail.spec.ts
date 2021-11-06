@@ -8,7 +8,7 @@ test("Should be able to create a valid email", () => {
   emailOrError = UserEmail.create("khalil@apollographql.com");
   expect(emailOrError.isSuccess).toBe(true);
   email = emailOrError.getValue();
-  expect(email?.value).toBe("khalil@apollographql.com");
+  expect(email.value).toBe("khalil@apollographql.com");
 });
 
 test("Should fail to create an invalid email", () => {
