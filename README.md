@@ -239,7 +239,7 @@ Here's the database schema of DDDForum:
 
 And here's the use case diagram:
 
-![Use case diagram](images/use-case-diagram.png)
+![Use case diagram](images/use-cases-refactored.svg)
 
 While we could call everyone a `User`, that could be unproductive to the ubiquitous language. There is a time and place to call a user a `User`, such as in an Identity & Access Management / Authentication context.
 
